@@ -1,0 +1,50 @@
+-------------------------
+Private ANN Benchmarking w/ Go Frontend
+Settings:
+** Vector Num: 1000000
+** DB Size (MB): 610.351562
+** Top K: 10
+** Rounds: 20
+** Parallel Exploration: 3
+** RTT (ms): 50
+** Window Size: 23
+
+Preprocessing Cost:
+** Storage (MB): 212.429688
+** Preparation Time (s): 2.639725
+** Offline Communication Cost Per Q (KB, amt.): 27173.906250
+** Amortized Maintainence Time Per Q (s): 0.114771
+
+Online Cost:
+** Average Computation Time Per Query (s): 0.055917
+** Average Total Time Per Q (s): 1.055917
+** Online Communication Per Q (KB): 2130.000000
+
+Quality:
+** Recall: 0.939501
+-----------------------
+-------------------------
+Private ANN Benchmarking w/ Go Frontend
+Settings:
+** Vector Num: 1000000
+** DB Size (MB): 610.351562
+** Top K: 10
+** Rounds: 20
+** Parallel Exploration: 3
+** RTT (ms): 50
+** Window Size: 23
+
+Preprocessing Cost:
+** Storage (MB): 212.429688
+** Preparation Time (s): 3.082467
+** Offline Communication Cost Per Q (KB, amt.): 27173.906250
+** Amortized Maintainence Time Per Q (s): 0.134020
+
+Online Cost:
+** Average Computation Time Per Query (s): 0.064044
+** Average Total Time Per Q (s): 1.064044
+** Online Communication Per Q (KB): 2130.000000
+
+Quality:
+** Recall: 0.954000
+-----------------------

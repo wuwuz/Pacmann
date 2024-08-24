@@ -1,0 +1,11 @@
+-------------------------
+NGT Stats
+Settings:
+** Vector Num: 1000000
+** Top K: 10
+
+** Average Computation Time Per Query (s): 0.001028
+
+Quality:
+** Recall: 0.999000
+-----------------------

@@ -1,0 +1,14 @@
+github.com/evan176/hnswgo v0.0.0-20220622031020-39253a76f9e4 h1:eYdhTPTj1XuYMSj0z0jX2M/3G3MuwYInBcX8fv9f2as=
+github.com/evan176/hnswgo v0.0.0-20220622031020-39253a76f9e4/go.mod h1:11Pgq6/bxATnB3XckcwKDY5XQA5asCa3hwSEOMGc0io=
+github.com/fogfish/it/v2 v2.0.1 h1:vu3kV2xzYDPHoMHMABxXeu5CoMcTfRc4gkWkzOUkRJY=
+github.com/fogfish/it/v2 v2.0.1/go.mod h1:h5FdKaEQT4sUEykiVkB8VV4jX27XabFVeWhoDZaRZtE=
+github.com/kpango/fastime v1.0.9/go.mod h1:lVqUTcXmQnk1wriyvq5DElbRSRDC0XtqbXQRdz0Eo+g=
+github.com/kpango/glg v1.4.1/go.mod h1:YM6wQXx2ktVPw7qf5UQUg2y29lub0KZ46L3zI3O1IiA=
+github.com/kshard/fvecs v0.0.1 h1:4FIjuJaiWWv1Q2y20w/1l13WhNlErWXs4yYVLmotNGo=
+github.com/kshard/fvecs v0.0.1/go.mod h1:cehO9AfnF3Tb2vOwhOWmoaNUfYqmm4WQrUMyrPGqN6Q=
+github.com/kshedden/gonpy v0.0.0-20210519231815-fa3c8dd8e59b h1:1Xm63EZszlHGYGKMq1aQc88ZllG0DCv/6S9mpKp+U7Y=
+github.com/kshedden/gonpy v0.0.0-20210519231815-fa3c8dd8e59b/go.mod h1:+uEXxXG0RlfBPqG1tq5QN/F2jRlcuY0dExSONLpEwcA=
+github.com/yahoojapan/gongt v0.0.0-20190517050727-966dcc7aa5e8 h1:WJzW9M0Xpv+61+tMTZPX8IwfaJR9hZm2dgKEIgVJQ7Y=
+github.com/yahoojapan/gongt v0.0.0-20190517050727-966dcc7aa5e8/go.mod h1:A2SfG3IwaM8xpwJ8LDD+tK7K1USXdDX0uF4jkWYwgI0=
+gonum.org/v1/hdf5 v0.0.0-20190227001252-83207889d689 h1:kkaDDDkZcDezmnomcLvU906I4tjWroioOqEzkFIg/T8=
+gonum.org/v1/hdf5 v0.0.0-20190227001252-83207889d689/go.mod h1:g+PDU5ogjIKcc3Cg4ALAK7X4c8bBQvPzPKWNW5NB7I0=
