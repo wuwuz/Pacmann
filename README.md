@@ -32,14 +32,10 @@ We implement a sublinear query cost private vector ANN search algorithm based on
 - b. ``go test -v -run InnerProduct`` (you can go into ``graphann_test.go`` and see the parameters)
 
 
-## Contributing
-
-Currently not available.
-
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Contacts
 
-privsearch@yahoo.com
+mingxunz@andrew.cmu.edu
