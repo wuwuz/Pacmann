@@ -3,6 +3,8 @@
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/username/repo/blob/master/LICENSE)
 
+Paper: https://eprint.iacr.org/2024/1600
+
 We implement a sublinear query cost private vector ANN search algorithm based on [PianoPIR](https://eprint.iacr.org/2023/452.pdf) and Graph-based ANN.
 
 ## Table of Content
