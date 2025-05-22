@@ -18,8 +18,9 @@ We implement a sublinear query cost private vector ANN search algorithm based on
 
 1. Install Go 1.22.
 2. Install the dependency of NGT. Instruction can be found here (https://github.com/yahoojapan/NGT)
-3. Run ``go mod tidy`` to download the go module dependencies.
-4. Download the SIFT dataset (http://corpus-texmex.irisa.fr/). Run ``sh SIFT-download.sh``. It takes a while -- the dataset is around 100GB. *Warning: it could take hours to download and extrat the files. It's recommended to run it in the background. Make sure the disk space is enough (>230GB).*
+3. Install the dependency of hnswgo: HNSWGO(https://github.com/evan176/hnswgo)
+4. Run ``go mod tidy`` to download the go module dependencies.
+5. Download the SIFT dataset (http://corpus-texmex.irisa.fr/). Run ``sh SIFT-download.sh``. It takes a while -- the dataset is around 100GB. *Warning: it could take hours to download and extrat the files. It's recommended to run it in the background. Make sure the disk space is enough (>230GB).*
 
 ## Usage
 
