@@ -1,0 +1,15 @@
+--extra-index-url https://download.pytorch.org/whl/cu117
+
+huggingface-hub==0.23.4
+nltk==3.8.1
+numpy==1.24.2
+requests==2.31.0
+scikit-learn==1.2.2
+scipy==1.10.1
+sentence-transformers==2.2.2
+sentencepiece==0.2.0
+tokenizers==0.13.3
+torch==2.0.0+cu117
+torchvision==0.15.1+cu117
+tqdm==4.66.4
+transformers==4.30.0

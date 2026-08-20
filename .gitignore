@@ -1,0 +1,8 @@
+# Reproduction downloads, generated embeddings, indexes, and run logs.
+reproduction-data/
+
+# Python development files.
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/

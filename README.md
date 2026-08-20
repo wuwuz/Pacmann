@@ -7,6 +7,19 @@ Paper: https://eprint.iacr.org/2024/1600
 
 We implement a sublinear query cost private vector ANN search algorithm based on [PianoPIR](https://eprint.iacr.org/2023/452.pdf) and Graph-based ANN.
 
+## Reproduce the paper's MS-MARCO result
+
+The repository now includes a one-command, end-to-end reproduction beginning
+with Microsoft's official MS-MARCO document download:
+
+```bash
+./reproduction/msmarco/reproduce.sh
+```
+
+See the [beginner-friendly MS-MARCO reproduction guide](reproduction/msmarco/README.md)
+for hardware requirements, exact artifact provenance, stage-by-stage commands,
+expected MRR, and troubleshooting.
+
 ## Table of Content
 
 - [Dependency](#Dependency)

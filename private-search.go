@@ -85,8 +85,10 @@ func main() {
 	benchmarking := flag.Bool("benchmark", false, "benchmarking mode")
 	rtt := flag.Int("rtt", 0, "round trip time in milliseconds")
 	nonPrivate := flag.Bool("nonprivate", false, "non-private mode")
+	randomSeed := flag.Int64("seed", 1, "seed for reproducible graph-search randomness")
 
 	flag.Parse()
+	rand.Seed(*randomSeed)
 
 	n = *numVectors
 	dim = *dimVectors
@@ -307,6 +309,7 @@ func main() {
 		fmt.Fprintf(file, "** Rounds: %d\n", *stepN)
 		fmt.Fprintf(file, "** Parallel Exploration: %d\n", *parallelN)
 		fmt.Fprintf(file, "** RTT (ms): %d\n", *rtt)
+		fmt.Fprintf(file, "** Random Seed: %d\n", *randomSeed)
 		fmt.Fprintf(file, "** Window Size: %d\n", windowSize)
 		fmt.Fprintf(file, "\n")
 		fmt.Fprintf(file, "Preprocessing Cost:\n")

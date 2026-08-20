@@ -23,6 +23,7 @@ import (
 	"os"
 	"runtime"
 	"sort"
+	"strconv"
 	"sync"
 	"time"
 
@@ -101,6 +102,18 @@ func BuildGraph(n int, dim int, m int, vectors [][]float32, savepath string, dat
 	graph := CreateGraphBasedOnNGT(vectors, ngtFileName, m)
 	EvaluateGraphQuality(vectors, graph)
 	return graph
+}
+
+func graphBuildThreads(defaultThreads int) int {
+	value := os.Getenv("PACMANN_GRAPH_THREADS")
+	if value == "" {
+		return defaultThreads
+	}
+	threads, err := strconv.Atoi(value)
+	if err != nil || threads <= 0 {
+		panic(fmt.Sprintf("PACMANN_GRAPH_THREADS must be a positive integer, got %q", value))
+	}
+	return threads
 }
 
 func L2Dist(v1, v2 []float32) float32 {
@@ -320,7 +333,7 @@ func CreateGraphBasedOnNGT(vectors [][]float32, ngtFile string, m int) [][]int {
 			ngt.Insert(tmp)
 		}
 
-		if err := ngt.CreateAndSaveIndex(runtime.NumCPU()); err != nil {
+		if err := ngt.CreateAndSaveIndex(graphBuildThreads(runtime.NumCPU())); err != nil {
 			fmt.Println("Error in creating ngt index: ", err)
 		}
 
@@ -358,8 +371,7 @@ func CreateGraphBasedOnNGT(vectors [][]float32, ngtFile string, m int) [][]int {
 
 	graph := make([][]int, n)
 
-	//maxThread := runtime.NumCPU() - 1
-	maxThread := 16
+	maxThread := graphBuildThreads(16)
 	fmt.Print("Number of threads: ", maxThread, "\n")
 
 	// we now use multithread to build the graph
