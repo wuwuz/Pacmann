@@ -16,6 +16,21 @@ with Microsoft's official MS-MARCO document download:
 ./reproduction/msmarco/reproduce.sh
 ```
 
+The script will:
+
+1. download the official MS-MARCO documents, development queries, and qrels;
+2. reproduce the paper's corpus filtering, row order, and document-ID mapping;
+3. encode all 3,201,821 documents and 1,000 queries with the pinned model, then
+   apply the paper's supplied 768-to-192 PCA transform;
+4. build the NGT index and degree-32 search graph from those embeddings using
+   16 threads—no prebuilt graph is downloaded;
+5. run the private search with the paper's MS-MARCO parameters; and
+6. map internal rows back to official document IDs, compute MRR@100, and fail
+   clearly if the data-integrity checks or expected quality range do not pass.
+
+Downloads and expensive intermediate results are kept in
+`reproduction-data/msmarco/`, so an interrupted run can be resumed.
+
 See the [beginner-friendly MS-MARCO reproduction guide](reproduction/msmarco/README.md)
 for hardware requirements, exact artifact provenance, stage-by-stage commands,
 expected MRR, and troubleshooting.
@@ -54,4 +69,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Contacts
 
-mingxunz@andrew.cmu.edu
+mingxunz@ust.hk

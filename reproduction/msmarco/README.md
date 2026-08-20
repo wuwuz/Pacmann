@@ -39,7 +39,9 @@ Use a 64-bit Ubuntu 22.04 Linux machine with:
 The 8.45 GB corpus download is resumable. Embedding 3.2 million documents is
 the longest stage and can take hours on a GPU or several days on CPU. The
 paper used 16 threads for graph construction and one thread for the remaining
-reported server computation.
+reported server computation. A completely cold 16-thread graph rebuild on the
+audit machine took 9 minutes 56 seconds; the paper reported 8.5 minutes on its
+experiment machine.
 
 ## One-time Ubuntu setup
 
@@ -76,6 +78,11 @@ From the root of the Pacmann repository:
 That is the complete command. It is safe to run it again after an interruption:
 completed downloads are reused, document embedding resumes from a checkpoint,
 and an existing graph is loaded instead of rebuilt.
+
+In a fresh work directory, this command performs the actual NGT-index and
+degree-32 graph construction; no prebuilt graph is downloaded. To force that
+construction again in a populated work directory, use `--rebuild-graph` as
+shown below.
 
 Generated data goes under `reproduction-data/msmarco/`, which Git ignores.
 Each search execution gets a new UTC-named directory under `runs/`. At the end,
@@ -114,10 +121,22 @@ Useful options:
 # Explicitly allow the very slow CPU encoder:
 ./reproduction/msmarco/reproduce.sh --device cpu
 
+# Rebuild the NGT index and graph from the existing reduced embeddings:
+./reproduction/msmarco/reproduce.sh \
+  --stage search \
+  --rebuild-graph \
+  --run-id graph-rebuild-01
+
 # Re-evaluate a named run:
 PACMANN_RUN_ID=20260820T120000Z \
   ./reproduction/msmarco/reproduce.sh --stage evaluate
 ```
+
+The forced-rebuild command moves any existing graph and NGT index to
+`msmarco-dataset/graph-backups/graph-rebuild-01/` before construction. This
+makes the operation recoverable and ensures that both graph-building phases
+really run. Allow about 3.5 GB of additional temporary disk space while the
+backup is retained. Choose a new `--run-id` for each forced rebuild.
 
 ## Exact data preparation performed
 
@@ -216,6 +235,19 @@ da00b64ff727a4e9573ef0571e65350fa78c5e4d7fb68f83c0bc5392a9e6c541  reduced querie
 335d6a415ce5f39ccfa3f7283174ec7c1e27f5075f1c8adbb8ef4d532a9e2bef  degree-32 graph
 ```
 
+The graph hash is provenance, not a required equality check. NGT graph
+construction is multithreaded and is not byte-deterministic. A cold audit
+rebuild produced graph SHA-256
+`6ce1cba4456993948379a992e7887f8e7e17b0e0b73d010f73fb7f2e1ae9127d`,
+shared an average of 22.06 of 32 neighbors per vertex with the historical
+graph, and produced `MRR@100 = 0.262003`. Validate a rebuilt graph by its shape,
+degree, index bounds, build log, and end-to-end MRR—not by requiring the
+historical graph hash.
+
+The normal `./reproduction/msmarco/reproduce.sh` command performs this cold
+build automatically in a fresh work directory. It reuses a graph only when a
+previous run has already created the expected graph path.
+
 ## Search parameters
 
 The automated command records and uses:
@@ -237,8 +269,8 @@ perform or require that division. The reproducible aggregate value is therefore
 Do not change parameters until you compare `artifact-manifest.json`. Check, in
 this order:
 
-1. graph hash and shape `(3201821, 32)`;
-2. document/query embedding hashes and row order;
-3. document-ID mapping;
-4. first-1,000 query hash and qrels hash;
-5. model revision, lack of prompts/L2 normalization, and PCA asset hash.
+1. document/query embedding hashes and row order;
+2. document-ID mapping;
+3. first-1,000 query hash and qrels hash;
+4. model revision, lack of prompts/L2 normalization, and PCA asset hash;
+5. graph shape `(3201821, 32)`, degree, index bounds, and build log.

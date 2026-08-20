@@ -10,6 +10,7 @@ device="auto"
 batch_size=32
 graph_threads=16
 seed=1
+rebuild_graph=false
 run_id=${PACMANN_RUN_ID:-$(date -u +%Y%m%dT%H%M%SZ)}
 
 usage() {
@@ -26,6 +27,7 @@ Options:
   --batch-size NUMBER   encoder batch size (default: 32)
   --graph-threads N     graph construction threads (default: 16)
   --seed N              graph-search random seed (default: 1)
+  --rebuild-graph       force a cold graph and NGT-index rebuild
   --run-id ID           name for this run (default: current UTC timestamp)
   --help                show this message
 
@@ -41,6 +43,7 @@ while [[ $# -gt 0 ]]; do
     --batch-size) batch_size=$2; shift 2 ;;
     --graph-threads) graph_threads=$2; shift 2 ;;
     --seed) seed=$2; shift 2 ;;
+    --rebuild-graph) rebuild_graph=true; shift ;;
     --run-id) run_id=$2; shift 2 ;;
     --help|-h) usage; exit 0 ;;
     *) echo "Unknown option: $1" >&2; usage >&2; exit 2 ;;
@@ -55,6 +58,10 @@ case "$device" in
   auto|cuda|cpu) ;;
   *) echo "Invalid device: $device" >&2; exit 2 ;;
 esac
+if [[ $rebuild_graph == true && $stage != all && $stage != search ]]; then
+  echo "--rebuild-graph is valid only with --stage all or --stage search" >&2
+  exit 2
+fi
 
 mkdir -p "$work_dir"
 work_dir=$(cd "$work_dir" && pwd)
@@ -66,6 +73,8 @@ run_dir="$work_dir/runs/$run_id"
 tools_dir="$work_dir/tools"
 go_dir="$tools_dir/go-1.22.1"
 ngt_dir="$tools_dir/ngt-2.2.2"
+graph_path="$dataset_dir/msmarco_embeddings_3201821_192_32_graph.npy"
+ngt_path="$dataset_dir/msmarco_embeddings_3201821_192_32.ngt"
 
 documents_url="https://msmarco.z22.web.core.windows.net/msmarcoranking/msmarco-docs.tsv.gz"
 queries_url="https://msmarco.z22.web.core.windows.net/msmarcoranking/msmarco-docdev-queries.tsv.gz"
@@ -173,12 +182,41 @@ prepare_native() {
   mkdir -p "$GOCACHE" "$GOPATH"
 }
 
+prepare_graph_rebuild() {
+  if [[ $rebuild_graph != true ]]; then
+    return
+  fi
+
+  if [[ ! -e "$graph_path" && ! -L "$graph_path" && ! -e "$ngt_path" && ! -L "$ngt_path" ]]; then
+    echo "No existing graph or NGT index found; proceeding with a cold graph build."
+    return
+  fi
+
+  local backup_dir="$dataset_dir/graph-backups/$run_id"
+  if [[ -e "$backup_dir" || -L "$backup_dir" ]]; then
+    echo "Graph backup path already exists: $backup_dir" >&2
+    echo "Choose a different --run-id before forcing another rebuild." >&2
+    exit 1
+  fi
+  mkdir -p "$backup_dir"
+
+  if [[ -e "$graph_path" || -L "$graph_path" ]]; then
+    mv "$graph_path" "$backup_dir/"
+  fi
+  if [[ -e "$ngt_path" || -L "$ngt_path" ]]; then
+    mv "$ngt_path" "$backup_dir/"
+  fi
+  echo "Moved the previous graph artifacts to $backup_dir"
+  echo "The search stage will rebuild both the NGT index and degree-32 graph."
+}
+
 run_search() {
   if [[ $stage == search ]]; then
     prepare_python
     echo "Validating existing generated inputs before graph construction/search"
     validate_generated_inputs
   fi
+  prepare_graph_rebuild
   prepare_native
   mkdir -p "$work_dir/bin" "$run_dir"
   echo "Building the Pacmann executable"
@@ -187,7 +225,7 @@ run_search() {
   PACMANN_GRAPH_THREADS="$graph_threads" "$work_dir/bin/private-search" \
     -n 3201821 -d 192 -m 32 -k 100 -q 1000 \
     -input "$dataset_dir/msmarco_embeddings.npy" \
-    -graph "$dataset_dir/msmarco_embeddings_3201821_192_32_graph.npy" \
+    -graph "$graph_path" \
     -query "$dataset_dir/msmarco_queries.npy" \
     -step 20 -parallel 3 -rtt 50 -seed "$seed" \
     -output "$run_dir/private-search-output.txt" \
