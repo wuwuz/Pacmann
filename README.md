@@ -31,6 +31,19 @@ The script will:
 Downloads and expensive intermediate results are kept in
 `reproduction-data/msmarco/`, so an interrupted run can be resumed.
 
+### Hardware and system requirements
+
+- 64-bit Ubuntu 22.04 with Python 3.10 or 3.11;
+- at least 40 GB of free disk space;
+- at least 32 GB of RAM (64 GB is safer);
+- 16 CPU threads to match the paper's graph-construction setting; and
+- preferably an NVIDIA GPU with at least 8 GB of memory and a recent driver.
+
+The official corpus download is 8.45 GB. Encoding all 3.2 million documents is
+the longest stage: expect hours with a suitable GPU or potentially several
+days on CPU. The graph itself takes only several minutes to build; our cold
+16-thread audit took 9 minutes 56 seconds.
+
 See the [beginner-friendly MS-MARCO reproduction guide](reproduction/msmarco/README.md)
 for hardware requirements, exact artifact provenance, stage-by-stage commands,
 expected MRR, and troubleshooting.
